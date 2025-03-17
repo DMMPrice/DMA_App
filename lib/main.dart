@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DMA Portal',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const WebViewScreen(),
@@ -35,7 +35,21 @@ class _WebViewScreenState extends State<WebViewScreen> {
   void initState() {
     super.initState();
     _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setJavaScriptMode(JavaScriptMode.unrestricted) // Enable JavaScript
+      ..setBackgroundColor(Colors.white)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            debugPrint('Page loading: $url');
+          },
+          onPageFinished: (String url) {
+            debugPrint('Page loaded: $url');
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint("Error: ${error.description}");
+          },
+        ),
+      )
       ..loadRequest(Uri.parse('https://dma.ictsbm.com'));
   }
 
